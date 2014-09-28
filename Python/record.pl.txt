@@ -1,0 +1,48 @@
+@name= {};
+@age={};
+@gpa={};
+@class={};
+
+print"Please enter the number of records: ";
+chomp($input = <STDIN>);
+$records = $input;
+for ($i=0; $i<$records;$i++){
+    print"Please enter your name: ";
+    chomp($input = <STDIN>);
+    @name = $input;
+    print"Please enter your age: ";
+    chomp($input = <STDIN>);
+    @age = $input;
+    print"Please enter your GPA: ";
+    chomp($input = <STDIN>);
+    @gpa = $input;
+    print"Please enter your Classification: ";
+    chomp($input = <STDIN>);
+    @class = $input;
+    }
+    
+    for ($x=0; $x<$records; $x++){
+        if (lc($class[$x]) eq lc( "senior")){
+            print"$name[$x] $age[$x] $gpa[$x] $class[$x]\n";
+        }
+        
+     }
+ 
+    for ($y=0; $y<$records; $y++){
+        if (lc($class[$y]) eq lc( "Junior")){
+            print"$name[$y] $age[$y] $gpa[$y] $class[$y]\n";
+        }
+     }
+
+    for ($s=0; $s<$records; $s++){
+        if (lc($class[$s]) eq lc( "Sophmore")){
+            print"$name[$s] $age[$s] $gpa[$s] $class[$s]\n";
+        }
+     }
+    for ($u=0; $u<$records; $u++){
+        if (lc($class[$s]) eq lc("Freshman")){
+            print"$name[$u] $age[$u] $gpa[$u], $class[$u]\n";
+        }
+     }
+
+

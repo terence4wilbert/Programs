@@ -1,0 +1,137 @@
+#-------------------------------------------------------------------------------
+# Name:        Python Programming Lab #3
+# Purpose:     This lab is designed to afford students the opportunity to
+#              demonstrate an understanding of various data abstractions,
+#              file input, and algorithmic development.  It is also designed to
+#              afford students an opportunity to design and implement a
+#              user-defined class and then use instances of that class to solve
+#              a familiar problem.
+#
+# Author:      Terence Wilbert
+#
+# Created:     04/09/2013
+#-------------------------------------------------------------------------------
+#!/usr/bin/env python
+
+def main():
+    pass
+class jewels(object):
+    def __init__(self):
+        self.name = ''
+        self.carats = 0.0
+        self.total_value =0.0
+    def __name(self,name):
+        self.name = name
+
+    def __carats(self, carats):
+        self.carats= float(carats)
+
+    def __total_value(self,total_value):
+        self.total_value = float(total_value)
+
+    def __value_per_carat(self, carats, total_value):
+        self.__value_per_carat = float(total_value) / float(carats)
+
+    def __str__(self):
+        format_Str ="name:%s carats:%0.2f caratValue:%0.2f totalValue:%0.2f"
+        resultStr = ( format_Str ) % \
+                (self.__name, self.__carats, self.__value_per_carat, self.__total_value)
+        return resultStr
+    def __lt__(self, other):
+        return self.__total_value < other.__value_per_carat
+
+    def __eq__(self, other):
+        return self.__total_value == other.__value_per_carat
+
+    def __le__(self,other):
+        return self.__total_value < other.__value_per_carat or self.__total_value == other.__value_per_carat
+    def __ne__(self, other):
+        return not(self.__total_value==other.__value_per_carat)
+    def __gt__(self, other):
+        return self.__total_value > other.__value_per_carat
+    def __ge__(self,other):
+        return self.__total_value >= other.__value_per_carat
+
+    def getName(self):
+        return self.__name
+    def getCarats(self):
+        return self.__carats
+    def get_total_value(self):
+        return self.__total_value
+
+
+
+
+
+""" assign any (non-negative, non-zero) integer to 'knapsackCapacity' """
+knapsackCapacity = 5
+
+""" sorts a list of jewels by value, keys on 'valCarat' element,
+    then returns the list  in value order, from highest to lowest """
+def sort_by_value(aJewelList):
+    aJewelList.sort(reverse=True)
+    res = []
+    for valCarat, aJewel, numCarat, originalValue in aJewelList:
+        res.append((aJewel, numCarat, originalValue))
+    return res
+#end sort_by_value
+
+""" Loops through inserting jewels from the sorted list
+    into a knapsack with capacity (n), until the number
+    of carats in the next jewel to be inserted is greater
+    than the capacity of the knapsack """
+def fillKnapsack(aJewelList):
+    booty = []  # 'booty' assigned to knapsack
+    newKnapsackCapacity  = knapsackCapacity
+    for aJewel, numCarat, originalValue in aJewelList:
+        if float(numCarat) <= newKnapsackCapacity:
+            booty.append((aJewel, numCarat, originalValue))
+            newKnapsackCapacity -= float(numCarat)
+    return booty
+#end fillKnapsack
+
+def main():
+    fileFound = False
+    while not fileFound:
+        fileName = input('File name containing jewel data: ')
+        try:
+            dataFile = open(fileName, "r")
+            fileFound = True
+
+        except:
+            print ('Could not find that file -- try again')
+    #end fileFound
+
+    done = False
+    sortedJewels = []
+    while not done:
+        line = dataFile.readline()
+        if len(line) > 0:
+            line = line.strip()
+            aJewel, numCarat, originalValue = line.split(',')
+            valCarat = float(originalValue) / float(numCarat)  #'valCarat' is assigned to value per carat
+            sortedJewels.append((valCarat, aJewel, numCarat, originalValue))
+        else:
+            done = True
+    #end while
+
+    print ('Knap sack capacity ==>', knapsackCapacity, 'carats')
+    print ("Thief's booty")
+    print ("   Gem\t\tWeight\t  Value")
+    for aJewel, numCarat, originalValue in fillKnapsack(sort_by_value(sortedJewels)):
+        print( ("%-10s\t %0.2f\t%8.02f") % (aJewel, float(numCarat), float(originalValue)) )
+    x = 0
+    for aJewel, numCarat, originalValue in fillKnapsack(sort_by_value(sortedJewels)):
+        x += float(originalValue)
+    print (("Total value of booty taken is $%0.2f") % x)
+    y = knapsackCapacity
+    for aJewel, numCarat, originalValue in fillKnapsack(sort_by_value(sortedJewels)):
+        y -= float(numCarat)
+    print ("We could have put", y, "more carats in\nthe knapsack.")
+#end main
+
+
+
+
+if __name__ == '__main__':
+    main()

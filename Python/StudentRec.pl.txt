@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use warnings;
+
+ @studentArray = ();
+print "Please Enter the number of records: ";
+chomp($input = <STDIN>);
+$records = $input;
+$count = 0;
+for ( $n = 0; $n<$records; $n++){
+# name
+    print"Please enter your name: ";
+    chomp($input = <STDIN>);
+    $name = $input;
+# age
+    print"Please enter your age: ";
+    chomp($input = <STDIN>);
+    $age = $input;
+#gpa
+    print"Please enter your GPA: ";
+    chomp($input = <STDIN>);
+    $gpa = $input;
+#classification
+    print"Please enter yout classificaton:";
+    chomp($input = <STDIN>);
+    $class = $input;
+    @rec = ($name, $age, $gpa, $class);
+    $count = $count + 4;
+    push(@studentArray, @rec);
+    }
+
+$n = 0;
+while ($n < $count){
+    print"$studentArray[$n] $studentArray[$n+1] $studentArray[$n+2] $studentArray[$n+3]\n";
+    $n += 4;
+    }
+
+

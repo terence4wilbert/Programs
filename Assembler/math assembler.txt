@@ -1,0 +1,46 @@
+***********************************************************************
+LAB02    TITLE  'Lab 02 - Basic Arithmetic Operations'
+LAB02    CSECT
+***********************************************************************
+* BEGIN SETUP BOILERPLATE
+SETUP    STM 14,12,12(13)
+         BALR 12,0
+         USING *,12
+         ST 13,SAVEAREA+4
+         LA 13,SAVEAREA
+* END SETUP BOILERPLATE
+***********************************************************************
+START
+
+SUM:
+         L  1,A
+         A  1,B
+         ST 1,SUM
+DIFFERENCE:
+         L  1,A
+         S  1,B
+         ST 1,DIFFERENCE
+PRODUCT:
+         L  1,A
+         M  1,B
+
+***********************************************************************
+* BEGIN EXIT BOILERPLATE
+EXIT     L 13,SAVEAREA+4
+         LM 14,12,12(13)
+         XR 15,15
+         BR 14
+* END EXIT BOILERPLATE
+***********************************************************************
+* STORAGE AREAS
+***********************************************************************
+A          DC F'1729'
+B          DC F'42'
+SUM        DS F             Store A + B here
+DIFFERENCE DS F             Store A - B here
+PRODUCT    DS F             Store A * B here
+REMAINDER  DS F             Store A % B here
+QUOTIENT   DS F             Store floor(A / B) here
+SAVEAREA   DS 18F
+***********************************************************************
+         END   LAB02   

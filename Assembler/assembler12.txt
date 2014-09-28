@@ -1,0 +1,39 @@
+; Problem x – Write a program in GMS assembly language that negates all the 
+;integer values in memory locations Data through DataEnd. 
+;Your solution should work no matter how many values of data exist. 
+; Solution – works
+; Solution developed by: Bradford Smith
+; Name of other individual Robert Boyd, Christian Romero
+;
+; Data
+           org 0x40 ; whatever address is required
+Data:    
+         db 0,1,-2,3,-4,5,-6,7,-8,9
+DataEnd: 
+         db -10
+Mask:
+         db 0xFF
+
+
+; Code
+           org 0x00 ; ALL programs are to have the first executable
+                    ; instruction loaded into address 0X00
+           sip 0x00
+
+           load r2,[Mask]
+           load r0,DataEnd
+           load r3,Data
+           load r4,1
+
+Loop:      iload r1,[r3]
+           xor  r1,r1,r2
+           add  r1,r1,r4
+           istore r1,[r3]
+           add r3,r3,r4
+
+jmple      r3<=r0,Loop
+
+           
+         
+           halt
+           

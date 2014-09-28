@@ -1,0 +1,136 @@
+* AUTHOR : BRADFORD SMITH
+* DATE  : MON. JAN 20, 2014
+***********************************************************************
+DISCRIM  TITLE  'Copy File IO - Read one file and output to another'
+DISCRIM  CSECT
+***********************************************************************
+* BEGIN SETUP BOILERPLATE
+        MYSETUP SAVEAREA
+* END SETUP BOILERPLATE
+***********************************************************************
+*-----------------*
+*BEGINNING OF FILE
+*-----------------*
+        OPEN (INFILE,(INPUT))                Open infile
+        OPEN (OUTFILE,(OUTPUT))              Open outfile
+
+DO      MVC INREC,=80C' '                  Clear output record
+
+*------------------------*
+*  READ NUMS, ADD THEM UP
+*------------------------*
+
+        GET INFILE,INREC                    Read line of input
+        PACK B,BIN                          Convert B to PACKED DECIMAL
+        PACK A,AIN                          Convert A to PACKED DECIMAL
+        PACK C,CIN                          Convert C to PACKED DECIMAL
+
+        ZAP TALLY,B                  Add B to Tally
+        MP  TALLY,B                  Multiply Total times B
+        ZAP TEMP,A                    Add A to Temp
+        MP  TEMP,C                    Multiply Temp by C
+        MP  TEMP,=P'4'              Multiply Temp by Packed
+        SP  TALLY,TEMP                Take temp away from Tally
+
+        BZ  ZERO
+        BP  PLUS
+        BM  NEGATIVE
+
+ZERO    MVC TALLYOUT,=CL15'  ZERO        '
+        B  MONKEY
+PLUS    MVC TALLYOUT,=CL15'  PLUS        '
+        B  MONKEY
+NEGATIVE MVC TALLYOUT,=CL15'  NEGATIVE    '
+        B MONKEY
+
+
+*---------------------------* (B^2 -4AC)
+*  OUTPUT NUMS AND TOTAL
+*---------------------------*
+
+
+
+
+
+MONKEY  MVC AOUT,AIN                  Copy number to OUTREC/AOUT
+        MVC BOUT,BIN                  Copy number to OUTREC/BOUT
+        MVC COUT,CIN                  Copy number to OUTREC/COUT
+
+
+
+
+        PUT OUTFILE,PRINTREC              Write PRINTREC to OUTFILE
+
+
+
+        B DO
+*-----------*
+*END OF FILE
+*-----------*
+ENDDATA  CLOSE INFILE
+
+        CLOSE OUTFILE
+
+
+
+
+
+***********************************************************************
+* BEGIN EXIT BOILERPLATE
+        MYEXIT SAVEAREA
+* END EXIT BOILERPLATE
+***********************************************************************
+* DATA CONTROL BLOCKS
+*********************************************************************
+OUTFILE  DCB  DSORG=PS,                                              X
+              MACRF=(PM),                                            X
+              DEVD=DA,                                                X
+              DDNAME=OUTFILE,                                        X
+              RECFM=FM,                                              X
+              LRECL=133
+INFILE  DCB  DSORG=PS,                                              X
+              MACRF=(GM),                                            X
+              DEVD=DA,                                                X
+              DDNAME=INFILE,                                          X
+              EODAD=ENDDATA,                                          X
+              RECFM=FB,                                              X
+              LRECL=80
+***********************************************************************
+* STORAGE AREAS
+***********************************************************************
+* Input storage areas
+INREC    DS    CL80
+AIN      EQU  INREC,5
+BIN      EQU  INREC+6,5
+CIN      EQU  INREC+12,5
+*********************************************************************
+* Output storage areas
+PRINTREC DS    0CL133
+CONTROL  DS    CL1
+
+AOUT    DS    CL5
+
+BOUT    DS    CL5
+
+COUT    DS    CL5
+
+
+
+TALLYOUT DS    CL15
+
+        DS    CL101
+
+*********************************************************************
+* Other work areas
+A        DS    PL3
+B        DS    PL3
+C        DS    PL3
+TALLY    DS    PL6
+TEMP    DS    PL6
+EDITNUM  DS    CL15
+MASK    DC    X'4020206B2020206B2020206B202021'
+SAVEAREA DS    18F
+
+
+***********************************************************************
+        END  DISCRIM 

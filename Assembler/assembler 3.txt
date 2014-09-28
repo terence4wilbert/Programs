@@ -1,0 +1,23 @@
+START
+
+
+SUM:
+         L  1,A
+         A  1,B
+         ST 1,SUM
+DIFFERENCE:
+         L  1,A
+         S  1,B
+         ST 1,DIFFERENCE
+PRODUCT:
+         L  1,A
+         L  2,B
+         M  2,1
+         ST 1,PRODUCT
+
+REMAINDER:
+         L  1,A
+         L  2,B
+         D  2,1
+         ST 1,QUOTIENT
+         ST 2,REMAINDER

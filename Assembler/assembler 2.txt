@@ -1,0 +1,57 @@
+* AUTHOR : BRADFORD SMITH
+* DATE  : MON. JAN 20, 2014
+***********************************************************************
+COPYSRC  TITLE  'Copy File IO - Read one file and output to another'
+COPYSRC  CSECT
+***********************************************************************
+* BEGIN SETUP BOILERPLATE
+        MYSETUP SAVEAREA
+
+* END SETUP BOILERPLATE
+***********************************************************************
+        OPEN (INDCB,(INPUT))          open input file
+        OPEN (OUTDCB,(OUTPUT))        open output file
+IOLOOP  MVC INAREA,=80C' '            start of loop, clear inarea
+        GET INDCB,INAREA              get 1 record from input
+        MVI OUTCARR,C' '              set ASA char in output
+        MVC OUTLINE(73),INAREA        move inarea to outline
+        PUT OUTDCB,OUTAREA            put/write outarea to output file
+        B IOLOOP                      jump to start of loop
+
+
+
+FINISH  CLOSE (INDCB)                close input file
+        CLOSE (OUTDCB)                close output file
+***********************************************************************
+* BEGIN EXIT BOILERPLATE
+        MYEXIT SAVEAREA
+* END EXIT BOILERPLATE
+***********************************************************************
+* DATA CONTROL BLOCKS
+***********************************************************************
+INDCB    DCB DSORG=PS,                                                *
+              MACRF=(GM),                                            *
+              DDNAME=SYSIN,                                          *
+              EODAD=FINISH,                                          *
+              RECFM=FB,                                              *
+              LRECL=80,                                              *
+              BLKSIZE=0
+OUTDCB  DCB DSORG=PS,                                                *
+              MACRF=(PM),                                            *
+              DDNAME=OUTPUT,                                          *
+              RECFM=FBA,                                              *
+              LRECL=133,                                              *
+              BLKSIZE=0
+***********************************************************************
+* STORAGE AREAS
+***********************************************************************
+SAVEAREA DS 18F
+INAREA  DS CL80
+OUTAREA  DS 0CL133
+OUTCARR  DC CL1' '
+OUTNUM  DC CL6'000000'
+OUTSPACE DC CL1' '
+OUTLINE  DC CL125' '
+*********************************************************************
+
+        END  COPYSRC 

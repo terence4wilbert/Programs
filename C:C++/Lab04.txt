@@ -1,0 +1,615 @@
+												LAB #4
+
+                                      by Wilbert, Terence
+
+
+7.9 Exercises 
+These exercises cover the following topics: 
+    •    “Learning about system volumes” on page 292 
+    •    “Using a utility program in a job” on page 292-293 
+    •    “Examining the TSO logon JCL” on page 293
+    •    “Exploring the master catalog” on page 293 
+    •    “Using SDSF” on page 294-295
+    •    “Using TSO REXX and ISPF ” on page 295-296
+
+7.9.1 Learning about system volumes 
+Use the ISPF functions to explore several system volumes. The following are of interest: 
+    •    Examine the naming of VSAM data sets. Note the words DATA and INDEX as the last qualifier. 
+Find the spool area on the system.  Use SDSF and type SP at the command input line.  What are the 
+volume names?
+My Response Is:
+ -------------------------------------------------------------------------------
+ SDSF SPOOL DISPLAY S0W1       4% ACT  19079 FRE  18308 LINE 1-3 (3)
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ PREFIX=*  DEST=(ALL)  OWNER=*  SYSNAME=
+ NP   NAME   Status   TGPct TGNum TGUse Command  SAff  Ext LoCyl    LoTrk
+      VPSPOL ACTIVE      21  1155   254          ANY   02  00000001 000000000000
+      VPSPON ACTIVE       2  8962   259          ANY   00  00000005 000000000000
+      VPSPOP ACTIVE       2  8962   258          ANY   01  00000003 000000000000
+
+
+
+
+    •    Find the basic system libraries, such as SYS1.PROCLIB and SYS1.SORTLIB. Look at the member names.
+
+My Response Is:
+ ------------------------------------------------------------------------------
+ DSLIST - Data Sets Matching SYS1.*                              Row 241 of 376
+ Command ===>                                                  Scroll ===> PAGE
+
+ Command - Enter "/" to select action                  Message           Volume
+ -------------------------------------------------------------------------------
+          SYS1.PROCLIB                                                   VIMVSB
+          SYS1.RACFBCK1                                                  VPMVSH
+          SYS1.RACFPRM1                                                  VPMVSH
+          SYS1.SACBCNTL                                                  VTMVSC
+          SYS1.SADRYLIB                                                  VTMVSC
+          SYS1.SAMPLIB                                                   VTMVSC
+          SYS1.SAXREXEC                                                  VTMVSC
+          SYS1.SBDTCLI0                                                  VTMVSC
+          SYS1.SBDTCMD                                                   VTMVSC
+          SYS1.SBDTHELP                                                  VTMVSC
+          SYS1.SBDTLIB                                                   VTMVSC
+          SYS1.SBDTLINK                                                  VTMVSC
+          SYS1.SBDTLPA                                                   VTMVSC
+          SYS1.SBDTMAC                                                   VTMVSC
+          SYS1.SBDTMSG                                                   VTMVSC
+
+
+    •    Consider the ISPF statistics field that is displayed in a member list. ?
+How does it differ for source libraries and execution libraries? 
+Hint: SYS1.PROCLIB is a source library and SYS1.SORTLIB is an execution library.
+My Response Is:
+------------------------------------------------------------------------------
+EDIT              SYS1.PROCLIB                              Row 00001 of 00084
+Command ===>                                                  Scroll ===> PAGE
+           Name     Prompt       Size   Created          Changed          ID
+_________ $$$COIBM                 29  1983/12/15  1991/07/22 09:27:00  SYSIPO
+_________ ANFWPROC
+_________ AOPPRINT
+_________ AOPSTART
+_________ AOPSTOP
+_________ APIJPJCL
+_________ APPC
+_________ ASCH
+_________ ASCHINT
+_________ ASMAC
+_________ ASMACG
+_________ ASMACL
+_________ ASMACLG
+_________ ASMFC                    16  1978/08/02  1992/03/16 19:09:00  SYSIPO
+_________ ASMFCG                   25  1978/08/02  1992/03/16 19:10:00  SYSIPO
+_________ ASMFCL                   29  1978/08/02  1992/03/16 19:10:00  SYSIPO
+_________ ASMFCLG                  31  1978/08/02  1992/03/16 19:10:00  SYSIPO
+
+
+ ------------------------------------------------------------------------------
+ VIEW              SYS1.SORTLIB                              Row 00001 of 00201
+ Command ===>                                                  Scroll ===> PAGE
+            Name     Prompt        Alias-of     Size      TTR     AC   AM   RM
+ _________ ICEABA                             00000090   000022   00    24   24
+ _________ ICEABB                             000000A0   000029   00    24   24
+ _________ ICEABC                             00000090   000030   00    24   24
+ _________ ICEABE                             00000090   000037   00    24   24
+ _________ ICEABF                             00000488   000107   00    24   24
+ _________ ICEABG                             000000B0   00010E   00    24   24
+ _________ ICEABH                             000000A8   000115   00    24   24
+ _________ ICEABI                             00000090   00011C   00    24   24
+ _________ ICEABJ                             000000A8   000123   00    24   24
+ _________ ICEABK                             00000090   00012A   00    24   24
+ _________ ICEABL                             000000B0   000131   00    24   24
+ _________ ICEABM                             000000B8   000138   00    24   24
+ _________ ICEABN                             000000A0   00013F   00    24   24
+ _________ ICEABO                             000000B8   000146   00    24   24
+ _________ ICEABP                             000000A0   00014D   00    24   24
+ _________ ICEABQ                             00000170   000207   00    24   24
+ _________ ICEABR                             00000188   00020E   00    24   24
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7.9.2 Using a utility program in a job 
+z/OS has a utility program named IEBGENER to copy data. It uses four DD statements: 
+    •    SYSIN for control statements. We can code DD DUMMY for this statement, because we do not have any 
+	control statements for this job. 
+    •    SYSPRINT for messages from the program. Use SYSOUT=X for this lab. 
+    •    SYSUT1 for the input data. 
+    •    SYSUT2 for the output data. 
+
+The basic function of the program is to copy the data set pointed to by SYSUT1 to the data set pointed 
+to by SYSUT2. Both must be sequential data sets or members of a library. 
+
+The program automatically obtains the data control block (DCB) attributes from the input data set 
+and applies them to the output data set. 
+
+Write the JCL for a job to list the yourid.JCL(TEST1) member to SYSOUT=X. 
+Paste the contents of yourid.JCL(TEST1) here:
+
+?My Response Is:
+
+
+
+
+
+
+7.9.3 Examining the TSO logon JCL 
+The password panel of the TSO logon process contains the name of the JCL procedure used to create
+a TSO session. There are several procedures with different characteristics. 
+
+What is the name of the basic TSO program that is executed? 
+Hint: Look at the TSO/E Logon screen next to the Procedure Option.
+My Response Is:
+
+
+   IBM System z Operating System - z/OS
+Look at the SPFPROCE procedure. It is located in the LVL0.PROCLIB dataset.
+
+Why are there so many DD statements?  
+My Response Is:
+
+
+
+7.9.4 Exploring the master catalog 
+Go to ISPF option 6 and do the following: 
+    •    Use a LISTC LEVEL(SYS1) command for a basic listing of all the SYS1 data sets in the
+	     master catalog. 
+
+My Response Is:
+       C332124.JCL
+ C332124.LANG.CNTL
+ C332124.LANG.LOAD
+ C332124.LANG.SOURCE
+ C332124.PROGRAM.LOAD
+ C332124.SPUFI.CNTL
+ C332124.S0W1.ISPF.ISPPROF
+ C332124.S0W1.SPFLOG1.LIST
+ C332124.S0W1.SPFLOG2.LIST
+ ***
+
+
+
+    •    Notice that they are either NONVASM or CLUSTER (and associated DATA and INDEX entries). The CLUSTERs
+	     are for VSAM data sets. 
+    •    Use the PA1 key to end the listing (for help, see 3.3.3, “Using the PA1 key” on page 3-14). 
+    •    Use a LISTC LEVEL(SYS1) ALL command for a more extended listing.
+
+My Response Is:
+
+  =>
+ NONVSAM ------- SYS1.AACBCNTL
+      IN-CAT --- MASTERV.CATALOG
+      HISTORY
+ ***
+ 
+         DATASET-OWNER-----(NULL)     CREATION--------2010.299
+        RELEASE----------------2     EXPIRATION------0000.000
+      VOLUMES
+        VOLSER------------VDMVSB     DEVTYPE------X'3010200F'     FSEQN---------
+---------0
+      ASSOCIATIONS--------(NULL)
+      ATTRIBUTES
+ NONVSAM ------- SYS1.AADFMAC1
+      IN-CAT --- MASTERV.CATALOG
+      HISTORY
+        DATASET-OWNER-----(NULL)     CREATION--------2010.299
+        RELEASE----------------2     EXPIRATION------0000.000
+      VOLUMES
+        VOLSER------------VDMVSB     DEVTYPE------X'3010200F'     FSEQN---------
+---------0
+      ASSOCIATIONS--------(NULL)
+      ATTRIBUTES
+ NONVSAM ------- SYS1.AADRLIB
+      IN-CAT --- MASTERV.CATALOG
+      HISTORY
+        DATASET-OWNER-----(NULL)     CREATION--------2010.299
+        RELEASE----------------2     EXPIRATION------0000.000
+      VOLUMES
+
+ 
+
+
+Note the volser and device type data for the NONVSAM data sets. This is the basic information in the catalog. 
+
+    •    Use LISTC LEVEL(xxx) to view one of the ALIAS levels and note that it comes from a user catalog. 
+My Response Is:
+
+  IDC3007I ** VSAM CATALOG RETURN CODE IS 8
+ ***
+ =>
+ IDC3012I ENTRY XXX. NOT FOUND+
+ IDC1566I ** XXX NOT LISTED
+ IDC0014I LASTCC=4
+ ***
+
+ 
+
+
+Note: If you enter the profile command with NOPREFIX, it produces a system-wide display when you 
+enter the commands LISTC and LISTC ALL.  These commands allow you to see all of the entries in the
+master catalog, including ALIAS entries. 
+
+7.9.5 Using SDSF 
+From the ISPF Primary Option Menu, locate and select the System Display and Search Facility (SDSF).
+This utility allows you to display output data sets. The ISPF Primary Option Menu typically includes
+more selections than those listed on first panel, with instructions about how to display the additional selections.
+ 
+Return to 6.14.1, “Creating a simple job” on page 265 and repeat the steps through Step 5 if needed.
+This will provide a job listing for this exercise. 
+My Response Is (paste in a copy of the job listing):
+
+ -------------------------------------------------------------------------------
+ EDIT       C332124.JCL(JCLTEST) - 01.01                    Columns 00001 00072
+ Command ===>                                                  Scroll ===> PAGE
+ ****** ***************************** Top of Data ******************************
+ ==MSG> -Warning- The UNDO command is not available until you change
+ ==MSG>           your edit profile using the command RECOVERY ON.
+ 000001 //KC02018A JOB
+ 000002 //C332124A JOB 1
+ 000003 //CREATE DD DSN=KC02018.MYTEST,DISP=(NEW,CATLG),
+ 000004
+ ****** **************************** Bottom of Data ****************************
+
+
+
+
+
+SDSF Exercise 1 
+While viewing the output listing, assume that you want to save it permanently to a data set for 
+later viewing. At the command input line, enter PRINT D. A window will prompt you to enter a data
+set name in which to save it. You can use an already existing data set or create a new one. 
+
+For this example, create a new data set by entering 'yourid.cobol.list'. In the disposition field,
+enter NEW. Press Enter to return to the previous screen. Note that the top right corner of the 
+screen displays PRINT OPENED. This means you can now print the listing. On the command input, 
+enter PRINT. Displayed at the top right of the screen will     be the number of lines printed 
+(xxx LINES PRINTED). This means the listing has now been placed in the data set that you created. 
+On the command line, enter PRINT CLOSE. At the top right screen you should now see PRINT CLOSED.
+
+My Response Is:
+ -------------------------------------------------------------------------------
+ SDSF OUTPUT ALL CLASSES ALL FORMS    LINES 86,082       PRINT OPENED
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ PREFIX=*  DEST=(ALL)  OWNER=*  SYSNAME=
+ NP   JOBNAME  JobID    Owner    Prty C Forms    Dest                 Tot-Rec
+      C332113  TSU02966 C332113   144 A STD      LOCAL                     19
+      C332114  TSU01522 C332114   144 A STD      LOCAL                     24
+      C332114  TSU03425 C332114   144 A STD      LOCAL                     72
+      C332116  TSU03367 C332116   144 A STD      LOCAL                     96
+      C332120  TSU03505 C332120   144 A STD      LOCAL                    301
+	  
+
+-------------------------------------------------------------------------------
+SDSF OUTPUT ALL CLASSES ALL FORMS    LINES 86,082      PRINT CLOSED      0 LINE
+COMMAND INPUT ===>                                            SCROLL ===> PAGE
+PREFIX=*  DEST=(ALL)  OWNER=*  SYSNAME=
+NP   JOBNAME  JobID    Owner    Prty C Forms    Dest                 Tot-Rec
+
+
+   Display  Filter  View  Print  Options  Search  Help
+ -------------------------------------------------------------------------------
+ SDSF OUTPUT DISPLAY C3321241 JOB04095  DSID     2 LINE         23 LINES PRINTED
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+********************************* TOP OF DATA **********************************
+                   J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E
+
+				   
+				   
+
+ SDSF OUTPUT DISPLAY KC02018A JOB04091  DSID     2 LINE 0       COLUMNS 02- 81
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+********************************* TOP OF DATA **********************************
+                   J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E
+
+12.14.21 JOB04091 ---- WEDNESDAY, 27 FEB 2013 ----
+12.14.21 JOB04091  IRR010I  USERID C332124  IS ASSIGNED TO THIS JOB.
+12.14.22 JOB04091  ICH70001I C332124  LAST ACCESS AT 12:09:52 ON WEDNESDAY, FEBR
+12.14.22 JOB04091  $HASP373 KC02018A STARTED - INIT 1    - CLASS A - SYS S0W1
+12.14.22 JOB04091  -                                      -----TIMINGS (MINS.)--
+12.14.22 JOB04091  -STEPNAME PROCSTEP    RC   EXCP   CONN       TCB       SRB  C
+12.14.22 JOB04091  -STEP1             FLUSH      0      0       .00       .00
+12.14.22 JOB04091  IEF453I KC02018A - JOB FAILED - JCL ERROR
+12.14.22 JOB04091  -KC02018A ENDED.  NAME-                     TOTAL TCB CPU TIM
+12.14.22 JOB04091  $HASP395 KC02018A ENDED
+------ JES2 JOB STATISTICS ------
+  27 FEB 2013 JOB EXECUTION DATE
+            4 CARDS READ
+		
+		
+   Display  Filter  View  Print  Options  Search  Help
+ -------------------------------------------------------------------------------
+ SDSF OUTPUT DISPLAY C3321241 JOB04095  DSID     2 LINE PRINT CLOSED     23 LINE
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+********************************* TOP OF DATA **********************************
+                   J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E
+
+12.48.43 JOB04095 ---- WEDNESDAY, 27 FEB 2013 ----
+12.48.43 JOB04095  IRR010I  USERID C332124  IS ASSIGNED TO THIS JOB.
+			
+			
+Now let’s look at the data set you created, yourid.cobol.list, and view the listing. Go to =3.4 and 
+enter your user ID. 
+
+Note: Depending on if you used single-quotes or not, you might have created a new data set called 
+yourid.yourid.cobol.list.
+
+A listing of all your data sets should appear. Locate yourid.cobol.list and enter a B next to it 
+in the command area. You should see the listing exactly as it appeared when you were using SDSF. 
+You can now return to SDSF ST and purge (P) your listing, because you now have a permanent copy. 
+Paste a screen shot or copy/paste the contents of yourid.COBOL.LIST:?
+
+My Response Is:
+  -------------------------------------------------------------------------------
+ BROWSE    C332124.COBOL.LIST                         Line 00000000 Col 001 080
+ Command ===>                                                  Scroll ===> PAGE
+********************************* Top of Data **********************************
+                   J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E
+
+12.48.43 JOB04095 ---- WEDNESDAY, 27 FEB 2013 ----
+12.48.43 JOB04095  IRR010I  USERID C332124  IS ASSIGNED TO THIS JOB.
+12.48.43 JOB04095  IEFC452I C3321241 - JOB NOT RUN - JCL ERROR  497
+------ JES2 JOB STATISTICS ------
+            8 CARDS READ
+           24 SYSOUT PRINT RECORDS
+            0 SYSOUT PUNCH RECORDS
+            1 SYSOUT SPOOL KBYTES
+         0.00 MINUTES EXECUTION TIME
+        1 //C3321241  JOB FB3,
+          //             C332124,       **JOB STATEMENT GENERATED BY SUBMIT**
+          //             NOTIFY=C332124,CLASS=A,
+          //             MSGLEVEL=(1,1)
+        2 //SYSIN     DD *               GENERATED STATEMENT
+        3 //EXEC PGM=IEFBR14
+  F1=Help    F2=Split   F3=Exit    F5=Rfind   F7=Up      F8=Down    F9=Swap
+ F10=Left   F11=Right  F12=Cancel
+ 
+ 
+ -------------------------------------------------------------------------------
+SDSF STATUS DISPLAY ALL CLASSES                        LINE 1-7 (7)
+COMMAND INPUT ===>                                            SCROLL ===> PAGE
+PREFIX=C332124*  DEST=( +----------------------------------------+
+NP   JOBNAME  JobID     ¦            Confirm Action              ¦ Status
+     C332124  TSU04090  ¦                                        ¦
+     C332124J JOB03066  ¦ 1   1.  Process action character       ¦
+     C332124C JOB03067  ¦     2.  Discard action character       ¦
+     C332124T JOB03068  ¦     3.  Process action character and   ¦
+     C332124A JOB04094  ¦         set confirmation off           ¦
+     C3321241 JOB04093  ¦                                        ¦
+ P   C3321241 JOB04095  ¦ Line number: 7      C3321241           ¦
+                        ¦                                        ¦
+                        ¦  F1=Help      F2=Split     F3=Cancel   ¦
+                        ¦  F9=Swap     F12=Cancel                ¦
+                        +----------------------------------------+
+
+
+
+
+ 
+
+
+
+Return to the main SDSF panel and enter LOG to display a log of all activity in the system. 
+Here, you can see much the information that the Operations Staff might see. For example, at 
+the bottom of the list, you might see the outstanding Reply messages to which an operator can 
+reply.                                                           
+
+Note that operator commands from the SDSF LOG command must be preceded by a forward slash (/) so 
+that it is recognized as a system command. 
+
+Now, type M in the command input and press F7; this will display the top of the log.
+
+My Response Is:
+   Display  Filter  View  Print  Options  Search  Help
+ -------------------------------------------------------------------------------
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/03/2013 0W         0       COLUMNS 02- 81
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+********************************* TOP OF DATA **********************************
+N 0000000 S0W1     13034 23:17:21.78          00000290  IEF196I IEF237I JES2 ALL
+X 0000000 S0W1     13034 23:17:21.83 SYSLOG   00000000  IEE042I SYSTEM LOG DATA
+N 0000000 S0W1     13034 23:17:21.83          00000290  IEF196I IEF285I   +MASTE
+N 4000000 S0W1     13034 23:17:21.83          00000090  IEE043I A SYSTEM LOG DAT
+NR0000000 S0W1     13034 23:17:21.87 STC04491 00000090  $HASP686 OUTPUT(SYSLOG)
+NR0000000 S0W1     13034 23:17:22.00 STC05385 00000090  $HASP686 OUTPUT(SYSLOG)
+NC0000000 S0W1     13034 23:18:02.96 IBMUSER  00000290  $COS(909),OUTGRP=5.1.1
+NR0000000 S0W1     13034 23:18:02.97 STC00909 00000090  $HASP686 OUTPUT(SYSLOG)
+NC0000000 S0W1     13034 23:18:03.05 IBMUSER  00000290  $COS(5385),OUTGRP=10.1.1
+NR0000000 S0W1     13034 23:18:03.10 STC05385 00000090  $HASP686 OUTPUT(SYSLOG)
+NC0000000 S0W1     13034 23:18:03.14 IBMUSER  00000290  $COS(5385),OUTGRP=11.1.1
+NC0000000 S0W1     13034 23:18:03.23 IBMUSER  00000290  $COS(5385),OUTGRP=12.1.1
+NR0000000 S0W1     13034 23:18:03.23 STC05385 00000090  $HASP686 OUTPUT(SYSLOG)
+NC0000000 S0W1     13034 23:18:03.32 IBMUSER  00000290  $COS(5385),OUTGRP=13.1.1
+NR0000000 S0W1     13034 23:18:03.35 STC05385 00000090  $HASP686 OUTPUT(SYSLOG)
+NC0000000 S0W1     13034 23:18:03.41 IBMUSER  00000290  $COS(5385),OUTGRP=14.1.1
+NR0000000 S0W1     13034 23:18:03.49 STC05385 00000090  $HASP686 OUTPUT(SYSLOG)
+
+
+
+Type F and your user ID to display the first entry associated with your user ID. Most likely this 
+will be when you logged onto TSO.
+
+My Response Is:
+   Display  Filter  View  Print  Options  Search  Help
+ -------------------------------------------------------------------------------
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/05/2013 0W          CHARS 'C332124' FOUND
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+N 0200000 S0W1     13036 07:55:16.68 TSU01586 00000281  $HASP100 C332124  ON TSO
+N 4000000 S0W1     13036 07:55:17.17 TSU01586 00000090  $HASP373 C332124  STARTE
+NC0000000 S0W1     13036 07:58:14.80 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 07:58:18.17 TSU01587 00000281  $HASP100 C332116  ON TSO
+N 4000000 S0W1     13036 07:58:18.76 TSU01587 00000090  $HASP373 C332116  STARTE
+NC0000000 S0W1     13036 08:01:43.19 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 08:01:47.42 TSU01588 00000281  $HASP100 C332115  ON TSO
+N 4000000 S0W1     13036 08:01:48.02 TSU01588 00000090  $HASP373 C332115  STARTE
+N 0200000 S0W1     13036 08:02:01.69 STC01589 00000281  $HASP100 BPXAS    ON STC
+N 4000000 S0W1     13036 08:02:02.29 STC01589 00000090  $HASP373 BPXAS    STARTE
+N 0000000 S0W1     13036 08:02:02.30 STC01589 00000290  BPXP024I BPXAS INITIATOR
+S                                                       ASID 0044
+N 0200000 S0W1     13036 08:02:03.69 STC01590 00000281  $HASP100 BPXAS    ON STC
+N 4000000 S0W1     13036 08:02:04.29 STC01590 00000090  $HASP373 BPXAS    STARTE
+N 0000000 S0W1     13036 08:02:04.29 STC01590 00000290  BPXP024I BPXAS INITIATOR
+S                                                       ASID 0046
+NC0000000 S0W1     13036 08:02:33.21 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 08:02:37.39 TSU01591 00000281  $HASP100 C332110  ON TSO
+
+Next enter F youridX, where X represents one of the jobs you submitted above. 
+Here you should see your job being received into the JES2 internal reader, and following that a 
+few lines indicating the status of your job as it runs. Perhaps you might see a JCL error, or 
+youridX started | ended.
+
+My Response Is:
+ -------------------------------------------------------------------------------
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/05/2013 0W         *BOTTOM OF DATA REACHED*
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+N 0200000 S0W1     13036 07:55:16.68 TSU01586 00000281  $HASP100 C332124  ON TSO
+N 4000000 S0W1     13036 07:55:17.17 TSU01586 00000090  $HASP373 C332124  STARTE
+NC0000000 S0W1     13036 07:58:14.80 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 07:58:18.17 TSU01587 00000281  $HASP100 C332116  ON TSO
+N 4000000 S0W1     13036 07:58:18.76 TSU01587 00000090  $HASP373 C332116  STARTE
+NC0000000 S0W1     13036 08:01:43.19 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 08:01:47.42 TSU01588 00000281  $HASP100 C332115  ON TSO
+N 4000000 S0W1     13036 08:01:48.02 TSU01588 00000090  $HASP373 C332115  STARTE
+N 0200000 S0W1     13036 08:02:01.69 STC01589 00000281  $HASP100 BPXAS    ON STC
+N 4000000 S0W1     13036 08:02:02.29 STC01589 00000090  $HASP373 BPXAS    STARTE
+N 0000000 S0W1     13036 08:02:02.30 STC01589 00000290  BPXP024I BPXAS INITIATOR
+S                                                       ASID 0044
+N 0200000 S0W1     13036 08:02:03.69 STC01590 00000281  $HASP100 BPXAS    ON STC
+N 4000000 S0W1     13036 08:02:04.29 STC01590 00000090  $HASP373 BPXAS    STARTE
+N 0000000 S0W1     13036 08:02:04.29 STC01590 00000290  BPXP024I BPXAS INITIATOR
+S                                                       ASID 0046
+NC0000000 S0W1     13036 08:02:33.21 INSTREAM 00000290  LOGON
+N 0200000 S0W1     13036 08:02:37.39 TSU01591 00000281  $HASP100 C332110  ON TSO
+
+SDSF Exercise 2 
+In this exercise, you enter operator commands from the Log screen. Enter the following at
+the Command input line and look at the resulting displays: 
+/D A,L This lists all active jobs in the system.
+
+My Response Is:
+ -------------------------------------------------------------------------------
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/05/2013 0W            2 RESPONSES NOT SHOWN
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ RESPONSE=S0W1
+  IEE114I 13.16.17 2013.058 ACTIVITY 527
+   JOBS     M/S    TS USERS    SYSAS    INITS   ACTIVE/MAX VTAM     OAS
+  00010    00019    00001      00031    00016    00001/00100       00021
+   LLA      LLA      LLA      NSW  S  JES2     JES2     IEFPROC  NSW  S
+   VLF      VLF      VLF      NSW  S  SDSF     SDSF     SDSF     NSW  S
+   EPWFFST  FFST     EPWFFST  NSW  S  VTAM     VTAM     VTAM     NSW  S
+   RRS      RRS      RRS      NSW  S  TCPIP    TCPIP    TCPIP    NSW  SO
+   OAM      OAM      IEFPROC  NSW  S  RACF     RACF     RACF     NSW  S
+   LOCKD    LOCKD    LOCKD    IN   SO JMON     JMON     JMON     OWT  SO
+   RSED     RSED     RSED     IN   SO RSEDSSL  RSEDSSL  RSED     IN   SO
+   TN3270   TN3270   TN3270   NSW  SO EXITMVS  EXITMVS  ST01     OWT  S
+   TCAS     TCAS     TCAS     OWT  S  INETD1   STEP1    TCPIP    OWT  AO
+   SSHD2    STEP1    OMVSKERN OWT  AO FTPSERVE STEP1    TCPIP    OWT  AO
+   RSEDSSL9 STEP1    STCRSE   IN   AO RSED9    STEP1    STCRSE   IN   AO
+   RSEDSSL1 STEP1    STCRSE   OWT  AO RSED1    STEP1    STCRSE   OWT  AO
+   RSED2    STEP1    STCRSE   IN   AO RSEDSSL2 STEP1    STCRSE   IN   AO
+   FMNCAS   FMNCAS   FMSERVR  OWT  SO CICSTS42 CICSTS42 CICS     NSW  SO
+
+/D U,,,A80,24 This lists currently online DASD VOLUMES.
+
+My Response Is:
+ -------------------------------------------------------------------------------
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/05/2013 0W            9 RESPONSES NOT SHOWN
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ RESPONSE=S0W1
+  IEE457I 13.17.04 UNIT STATUS 529
+  UNIT TYPE STATUS        VOLSER     VOLSTATE
+  0B00 3390 F-NRD                        /RSDNT
+  0B01 3390 F-NRD                        /RSDNT
+  0B02 3390 F-NRD                        /RSDNT
+  0B03 3390 F-NRD                        /RSDNT
+  0B04 3390 F-NRD                        /RSDNT
+  0B05 3390 F-NRD                        /RSDNT
+  0B06 3390 F-NRD                        /RSDNT
+  0B07 3390 F-NRD                        /RSDNT
+  0B08 3390 F-NRD                        /RSDNT
+  0B09 3390 F-NRD                        /RSDNT
+  0B0A 3390 F-NRD                        /RSDNT
+  0B0B 3390 F-NRD                        /RSDNT
+  0B0C 3390 F-NRD                        /RSDNT
+  0B0D 3390 F-NRD                        /RSDNT
+  0B0E 3390 F-NRD                        /RSDNT
+
+/V A88,OFFLINE Scroll to the bottom to see results (M F8).
+
+My Response Is:
+
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ RESPONSE=S0W1      IEE345I VARY     AUTHORITY INVALID, FAILED BY SECURITY
+ RESPONSE=PRODUCT
+ RESPONSE=S0W1      ICH408I USER(C332124 ) GROUP(STUDENT )
+ RESPONSE=NAME(####################)
+ RESPONSE=S0W1        MVS.VARY.DEV CL(OPERCMDS)
+ RESPONSE=S0W1        INSUFFICIENT ACCESS AUTHORITY
+ RESPONSE=S0W1        FROM MVS.** (G)
+ RESPONSE=S0W1        ACCESS INTENT(UPDATE )  ACCESS ALLOWED(READ   )
+/D U,,,A88,2 Check its Status; note that VOLSER is not displayed for offline volumes. 
+While a volume is offline, you can run utilities such as ICKDSF, which allows you to 
+format a volume.
+
+My Response Is:
+ COMMAND INPUT ===>
+ RESPONSE=S0W1
+  IEE457I 13.19.46 UNIT STATUS 537
+  UNIT TYPE STATUS        VOLSER     VOLSTATE
+  0B00 3390 F-NRD                        /RSDNT
+  0B01 3390 F-NRD                        /RSDNT
+
+/V A88,ONLINE Scroll to the bottom and see the results.
+
+My Response Is:
+COMMAND INPUT ===>                                            SCROLL ===> PAGE
+RESPONSE=S0W1      IEE345I VARY     AUTHORITY INVALID, FAILED BY SECURITY
+RESPONSE=PRODUCT
+RESPONSE=S0W1      ICH408I USER(C332124 ) GROUP(STUDENT )
+RESPONSE=NAME(####################)
+RESPONSE=S0W1        MVS.VARY.DEV CL(OPERCMDS)
+RESPONSE=S0W1        INSUFFICIENT ACCESS AUTHORITY
+RESPONSE=S0W1        FROM MVS.** (G)
+RESPONSE=S0W1        ACCESS INTENT(UPDATE )  ACCESS ALLOWED(READ   )
+
+/D U,,,A88,2 Check its status; VOLSER is now displayed.
+
+My Response Is:
+ COMMAND INPUT ===>
+ RESPONSE=S0W1
+  IEE457I 13.21.41 UNIT STATUS 542
+  UNIT TYPE STATUS        VOLSER     VOLSTATE
+  0B00 3390 F-NRD                        /RSDNT
+  0B01 3390 F-NRD                        /RSDNT
+
+/C U=yourid Cancels a job (your TSO session in this case). 
+Logon yourid Log back onto your ID. 
+
+ SDSF SYSLOG    909.106 S0W1 S0W1 02/05/2013 0W          COMMAND ISSUED
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE
+ RESPONSE=S0W1      IEE345I CANCEL   AUTHORITY INVALID, FAILED BY SECURITY
+ RESPONSE=PRODUCT
+ RESPONSE=S0W1      ICH408I USER(C332124 ) GROUP(STUDENT )
+ RESPONSE=NAME(####################)
+ RESPONSE=S0W1        MVS.CANCEL.TSU.C332124 CL(OPERCMDS)
+ RESPONSE=S0W1        INSUFFICIENT ACCESS AUTHORITY
+ RESPONSE=S0W1        FROM MVS.** (G)
+ RESPONSE=S0W1        ACCESS INTENT(UPDATE )  ACCESS ALLOWED(READ   )
+
+ 
+
+ 
+
+ 

@@ -2,8 +2,8 @@
 ;integer values in memory locations Data through DataEnd. 
 ;Your solution should work no matter how many values of data exist. 
 ; Solution – works
-; Solution developed by: Bradford Smith
-; Name of other individual Robert Boyd, Christian Romero
+; Solution developed by: Terence Wilbert
+; 
 ;
 ; Data
            org 0x40 ; whatever address is required

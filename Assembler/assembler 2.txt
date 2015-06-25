@@ -1,4 +1,4 @@
-* AUTHOR : BRADFORD SMITH
+* AUTHOR : Terence Wilbert
 * DATE  : MON. JAN 20, 2014
 ***********************************************************************
 COPYSRC  TITLE  'Copy File IO - Read one file and output to another'

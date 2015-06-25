@@ -1,10 +1,9 @@
 #-------------------------------------------------------------------------------
 # Name:        Python Programming Lab 2
 # Purpose       To Theif with the greatest possible profit: Crime Pays!!!$$$
-# Author:       Bradford Smith
+# Author:       Terence Wilbert
 # WTAMU ID#:    951203
 # Created:     28/03/2013
-# Copyright:   (c) Bradford 2013
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python

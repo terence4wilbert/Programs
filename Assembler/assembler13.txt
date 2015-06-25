@@ -3,8 +3,8 @@
 ;This should be accomplished with a count-controlled loop NOT an address comparison 
 ;loop. prob5.gms. 
 ; Solution – works
-; Solution developed by: Bradford Smith
-; Name of other individual Robert Boyd, Christian Romero
+; Solution developed by: Terence Wilbert
+; 
 ;
 ; Data
            org 0x40 ; whatever address is required

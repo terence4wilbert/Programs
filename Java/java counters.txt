@@ -1,7 +1,7 @@
 '''
 A class that tests functionality of the Counter class
 
-@author: H. Paul Haiduk
+@author: Terence Wilbert
 @version: 3.0
 '''
 from Counter import Counter

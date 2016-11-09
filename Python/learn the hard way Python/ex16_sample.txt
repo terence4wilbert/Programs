@@ -1,0 +1,3 @@
+this is a line for me
+a line for you 
+show me some output

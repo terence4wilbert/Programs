@@ -56,6 +56,8 @@ class Manager : public Employee {
         bool salaried;
     
     public:
+    
+        Manager() : salaried(true) { }
         Manager(string name, double payRate, bool isSalaried)
             : Employee(name, payRate)
         {

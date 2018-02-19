@@ -1,0 +1,35 @@
+
+# with open('test.txt', 'r') as file1:
+#     with open('test2.txt', 'r') as file2:
+#         same = set(file1).intersection(file2)
+#
+# same.discard('\n')
+#
+# with open('some_output_file.txt', 'w') as file_out:
+#     for line in same:
+#         file_out.write(line)
+
+
+Compare1 = open("test.txt", "r")
+Compare2 = open("test2.txt", "r")
+Compare1Dictionary = Compare1.readlines()
+Compare2Dictionary = Compare2.readlines()
+
+# print Compare1Dictionary
+# print '\n'
+# print Compare2Dictionary
+
+
+FinalCompare = [x for x in Compare2Dictionary if x not in Compare1Dictionary]
+
+
+def print_it():
+    q = 0
+
+    for x in FinalCompare:
+        print x.strip('\r\n')
+        q += 1
+    print 'There are %d differences' % q
+
+
+print_it()

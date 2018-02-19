@@ -1,0 +1,173 @@
+Mention five benefits of using Python?
+
+Python comprises of a huge standard library for most Internet platforms like Email, HTML, etc.
+Python does not require explicit memory management as the interpreter itself allocates the memory to new variables and free them automatically
+Provide easy readability due to use of square brackets
+Easy-to-learn for beginners
+Having the built-in data types saves programming time and effort from declaring variables
+
+
+How is memory managed in Python?
+Ans:
+
+Python memory is managed by Python private heap space. All Python objects and data structures are located in a private heap. The programmer does not have an access to this private heap and interpreter takes care of this Python private heap.
+The allocation of Python heap space for Python objects is done by Python memory manager. The core API gives access to some tools for the programmer to code.
+Python also have an inbuilt garbage collector, which recycle all the unused memory and frees the memory and makes it available to the heap space.
+
+What does this mean: *args, **kwargs? And why would we use it?
+Ans: We use *args when we aren’t sure how many arguments are going to be passed to a function, or if we want to pass a stored list or tuple of arguments to a function. **kwargsis used when we don’t know how many keyword arguments will be passed to a function, or it can be used to pass the values of a dictionary as keyword arguments. The identifiers args and kwargs are a convention, you could also use *bob and **billy but that would not be wise.
+
+What is map function in Python?
+Ans: map function executes the function given as the first argument on all the elements of the iterable given as the second argument. If the function given takes in more than 1 arguments, then many iterables are given. #Follow the link to know more similar functions.
+
+Explain the use of decorators.
+Ans: Decorators in Python are used to modify or inject code in functions or classes. Using decorators, you can wrap a class or function method call so that a piece of code can be executed before or after the execution of the original code. Decorators can be used to check for permissions, modify or track the arguments passed to a method, logging the calls to a specific method, etc.
+
+
+Explain Python's zip() function.?
+zip() function- it will take multiple lists say list1, list2, etc and transform them into a single list of tuples by taking the corresponding elements of the lists that are passed as parameters. Eg:
+
+list1 = ['A',
+'B','C'] and list2 = [10,20,30].
+zip(list1, list2) # results in a list of tuples say [('A',10),('B',20),('C',30)]
+whenever the given lists are of different lengths, zip stops generating tuples when the first list ends.
+
+
+Explain how to overload constructors or methods in Python.
+Python’s constructor – _init__ () is a first method of a class. Whenever we try to instantiate a object __init__() is automatically invoked by python to initialize members of an object.
+
+What is the use of enumerate() in Python?
+Using enumerate() function you can iterate through the sequence and retrieve the index position and its corresponding value at the same time.
+
+What are Accessors, mutators, @property?
+Accessors and mutators are often called getters and setters in languages like “Java”. For example, if x is a property of a user-defined class, then the class would have methods called setX() and getX(). Python has an @property “decorator” that allows you to ad getters and setters in order to access the attribute of the class.
+
+What are the built-in type does python provides?
+
+There are mutable and Immutable types of Pythons built in types Mutable built-in types
+
+List
+Sets
+Dictionaries
+Immutable built-in types
+
+Strings
+Tuples
+Numbers
+
+What is lambda in Python?
+
+It is a single expression anonymous function often used as inline function.
+
+In Python what are iterators?
+
+In Python, iterators are used to iterate a group of elements, containers like list.
+
+What are generators in Python?
+
+The way of implementing iterators are known as generators.  It is a normal function except that it yields expression in the function.
+The yield enables a function to comeback where it left off when it is called again. This is the critical difference from a regular function. A regular function cannot comes back where it left off. The yield keyword helps a function to remember its state.
+
+A generator function is a way to create an iterator. A new generator object is created and returned each time we call a generator function. A generator yields the values one at a time, which requires less memory and allows the caller to get started processing the first few values immediately.
+
+
+
+How you can convert a number to a string?
+
+In order to convert a number into a string, use the inbuilt function str().  If you want a octal or hexadecimal representation, use the inbuilt function oct() or hex().
+
+Mention the use of // operator in Python?
+
+It is a Floor Divisionoperator , which is used for dividing two operands with the result as quotient showing only digits before the decimal point. For instance, 10//5 = 2 and 10.0//5.0 = 2.0.
+
+
+What Are The Principal Differences Between The Lambda And Def?
+Lambda Vs Def.
+def can hold multiple expressions while lambda is a uni-expression function.
+def generates a function and designates a name so as to call it later. lambda forms a function and returns the function itself.
+def can have a return statement. lambda can’t have return statements
+lambda supports to get used inside a list and dictionary.
+
+
+What Does The <Self> Keyword Do?
+The <self> keyword is a variable that holds the instance of an object. In almost, all the object-oriented languages, it is passed to the methods as hidden parameter.
+
+preorder
+In a preorder traversal, we visit the root node first, then recursively do a preorder traversal of the left subtree, followed by a recursive preorder traversal of the right subtree.
+inorder
+In an inorder traversal, we recursively do an inorder traversal on the left subtree, visit the root node, and finally do a recursive inorder traversal of the right subtree.
+postorder
+In a postorder traversal, we recursively do a postorder traversal of the left subtree and the right subtree followed by a visit to the root node.
+
+
+Using Functions to Access Elements
+In addition to using keys to access values, we can also work with some built-in functions:
+
+dict.keys() isolates keys
+dict.values() isolates values
+dict.items() returns items in a list format of (key, value) tuple pairs
+
+Hashable	Non-Hashable
+Floats	Dictionaries
+Integers	Sets
+Tuples	Lists
+Strings
+frozenset()
+
+How is Python executed?
+Python files are first compiled to bytecode and is then executed by the host. “OR” Type python.pv at the command line.
+
+Explain the use of try: except: raise, and finally.
+Python makes use of try, except and finally blocks for error handling. Try block is used to execute the code until an error occurs. We can make use of an except block to receive control which will receive control after all errors, or one can use specific exception handling blocks for various error types. Control is transferred to the appropriate except block. In all cases, the finally block is executed. Raise may be used to raise your own exceptions.
+
+How are instance variables different from class variables?
+Instance variables are variables that are created locally within a class to refer to an object of the class. A class variable is one that is created globally in a class and is accessible within all instance of that class.
+
+What is namespace in Python?
+In Python, every name introduced has a place where resides and can be found. This space is known as namespace. It is an address location where a variable name is mapped to the object placed. Whenever the variable is searched out, this address location will be searched, to get corresponding object.
+
+When would you use a continue statement in a for loop?
+When processing a particular item is complete, to move on to the next, without executing further processing in the block continue statement is used. The continue statement states, the current item is done processing, move on to the next item.
+
+What is __init__.py?
+It is used to import a module in a directory, which is called package import.
+
+If we have a module, dir1/dir2/mod.py, we put __init__.py in each directories so that we can import the mod like this:
+
+range() returns a list
+
+Manipulating functions as first-class objects
+Functions as first-class objects?
+That means we can pass them around as objects and can manipulate them. In other words, most of the times, this just means we can pass these first-class citizens as arguments to functions, or return them from functions. Everything in Python is a proper object. Even things that are "primitive types" in other languages:
+
+Monkey-patching
+The origin of monkey-patch according to wiki is :
+"The term monkey patch seems to have come from an earlier term, guerrilla patch, which referred to changing code sneakily at runtime. The word guerrilla, homophonous with gorilla, became monkey, possibly to make the patch sound less intimidating."
+
+__str__ vs __repr__
+The difference between __str__ and __repr__ are not that obvious.
+
+When we use print, Python will look for an __str__ method in our class. If it finds one, it will call it. If it does not, it will look for a __repr__ method and call it. If it cannot find one, it will create an internal representation of our object.
+
+Iterators
+In computer science, an iterator is an object that allows a programmer to traverse through all the elements of a collection regardless of its specific implementation.
+
+1. Name five modules that are included in python by default (many people come searching for this, so I included some more examples of modules which are often used)
+
+datetime           (used to manipulate date and time)
+re                         (regular expressions)
+urllib, urllib2  (handles many HTTP things)
+string                  (a collection of different groups of strings for example all lower_case letters etc)
+itertools            (permutations, combinations and other useful iterables)
+ctypes                (from python docs: create and manipulate C data types in Python)
+email                  (from python docs: A package for parsing, handling, and generating email messages)
+__future__      (Record of incompatible language changes. like division operator is different and much better when imported from __future__)
+sqlite3               (handles database of SQLite type)
+unittest             (from python docs: Python unit testing framework, based on Erich Gamma’s JUnit and Kent Beck’s Smalltalk testing framework)
+xml                     (xml support)
+logging              (defines logger classes. enables python to log details on severity level basis)
+os                        (operating system support)
+pickle                (similar to json. can put any data structure to external files)
+subprocess    (from docs: This module allows you to spawn processes, connect to their input/output/error pipes, and obtain their return codes)
+webbrowser  (from docs: Interfaces for launching and remotely controlling Web browsers.)
+traceback       (Extract, format and print Python stack traces)
